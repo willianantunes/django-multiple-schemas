@@ -5,8 +5,19 @@ name = "pypi"
 
 [packages]
 django = "*"
+psycopg2-binary = "*"
 
 [dev-packages]
+pytest-django = "*"
+pytest-mock = "*"
+pytest-cov = "*"
+black = "*"
+isort = "*"
+tox = "*"
+mypy = "*"
 
 [requires]
 python_version = "3.9"
+
+[pipenv]
+allow_prereleases = true
