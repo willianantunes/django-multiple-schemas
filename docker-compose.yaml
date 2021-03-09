@@ -10,8 +10,12 @@ services:
     # "root" execution of the PostgreSQL server is not permitted.
     user: postgres
     environment:
-      POSTGRES_USER: django_multiple_schemas_dev
-      POSTGRES_PASSWORD: django_multiple_schemas_password
+      POSTGRES_USER: boss_role
+      POSTGRES_PASSWORD: boss_password
+    volumes:
+      - ./scripts/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
+    ports:
+    - "5432:5432"
   remote-interpreter:
     build: *dockerfile-dev-build
     volumes:
