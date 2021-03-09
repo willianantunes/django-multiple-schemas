@@ -7,6 +7,8 @@ x-build: &dockerfile-dev-build
 services:
   db:
     image: postgres:13.2-alpine
+    # "root" execution of the PostgreSQL server is not permitted.
+    user: postgres
     environment:
       POSTGRES_USER: django_multiple_schemas_dev
       POSTGRES_PASSWORD: django_multiple_schemas_password
