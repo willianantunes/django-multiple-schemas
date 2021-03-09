@@ -28,3 +28,29 @@ services:
         "--",
         "./scripts/start-development.sh",
       ]
+  tests:
+    build: *dockerfile-dev-build
+    volumes:
+      - .:/app
+    env_file: .env.development
+    depends_on:
+      - db
+    command:
+      [
+        "./scripts/wait-for-it.sh",
+        "db:5432",
+        "-t",
+        "120",
+        "--",
+        "./scripts/start-tests.sh",
+      ]
+  lint:
+    build: *dockerfile-dev-build
+    volumes:
+      - .:/app
+    command: ["./scripts/start-lint.sh"]
+  formatter:
+    build: *dockerfile-dev-build
+    volumes:
+      - .:/app
+    command: ["./scripts/start-formatter.sh"]

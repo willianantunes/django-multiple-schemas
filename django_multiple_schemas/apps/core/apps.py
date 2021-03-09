@@ -2,4 +2,4 @@ from django.apps import AppConfig
 
 
 class CoreConfig(AppConfig):
-    name = 'django_multiple_schemas.apps.core'
+    name = "django_multiple_schemas.apps.core"
