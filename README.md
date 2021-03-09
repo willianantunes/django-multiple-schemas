@@ -10,6 +10,14 @@ TODO.
 
 ## Development
 
+### Database initialization scripts
+
+You can check it out consulting [initialize-database.sh](./scripts/docker-entrypoint-initdb.d/initialize-database.sh) file. The result is like the following:
+
+![An image which shows all the database's objects](./docs/all-schemas-and-tables-inside-schema-dev.png "All schemas/folders created")
+
+It's important to mention that if you execute `docker-compose up tests` it won't pass, unless you comment out `OPTIONS` key which is stored in the dictionary DATABASES in [settings.py](./django_multiple_schemas/settings.py). I will solve that soon.
+
 ### Updating pipenv dependencies
 
 If you update Pipfile, you can issue the following command to refresh your lock file:
@@ -32,11 +40,11 @@ You can do this as well:
 
 We're accessing through `bash`, but you are able to access `psql` directly.
 
-Then execute the command `psql -U django_multiple_schemas_dev` (check if the user matches with what is in [docker-compose.yaml](./docker-compose.yaml)) to be able to execute SQL commands direct to the database.
+Then execute the command `psql -U boss_role` (check if the user matches with what is in [docker-compose.yaml](./docker-compose.yaml)) to be able to execute SQL commands direct to the database.
 
 ### Listing all the schemas
 
-If you only make `db` service up, then if you execute `select schema_name from information_schema.schemata;` you should see the following output:
+Sample output of the command `select schema_name from information_schema.schemata;`:
 
 ```text
     schema_name     
@@ -46,4 +54,16 @@ If you only make `db` service up, then if you execute `select schema_name from i
  public
  information_schema
 (4 rows)
+```
+
+### Listing all database
+
+Sample output of the command `SELECT datname FROM pg_database WHERE datistemplate = false;`:
+
+```text
+           datname           
+-----------------------------
+ postgres
+ django_multiple_schemas_dev
+(2 rows)
 ```
