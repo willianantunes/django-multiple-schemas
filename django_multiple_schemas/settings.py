@@ -9,10 +9,14 @@ https://docs.djangoproject.com/en/3.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.1/ref/settings/
 """
-
+import os
 from pathlib import Path
 
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
+from typing import Optional
+
+from django_multiple_schemas.apps.core.apps import CoreConfig
+from django_multiple_schemas.support.django_helpers import eval_env_as_boolean
+
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
@@ -23,9 +27,13 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = '9fv(4j9*_^4!bn&g^yi!mspu#i^jnj*x161144+w+yc$gxkfrv'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = eval_env_as_boolean("DJANGO_DEBUG", False)
 
-ALLOWED_HOSTS = []
+DJANGO_ALLOWED_HOSTS: Optional[str] = os.getenv("ALLOWED_HOSTS")
+if DJANGO_ALLOWED_HOSTS:
+    ALLOWED_HOSTS = DJANGO_ALLOWED_HOSTS.split(",")
+else:
+    ALLOWED_HOSTS = ["*"]
 
 
 # Application definition
@@ -37,6 +45,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    CoreConfig.name,
 ]
 
 MIDDLEWARE = [
@@ -74,9 +83,13 @@ WSGI_APPLICATION = 'django_multiple_schemas.wsgi.application'
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+    "default": {
+        "ENGINE": os.getenv("DB_ENGINE", "django.db.backends.sqlite3"),
+        "NAME": os.getenv("DB_DATABASE", os.path.join(BASE_DIR, "db.sqlite3")),
+        "USER": os.getenv("DB_USER"),
+        "HOST": os.getenv("DB_HOST"),
+        "PORT": os.getenv("DB_PORT"),
+        "PASSWORD": os.getenv("DB_PASSWORD"),
     }
 }
 

@@ -1,0 +1,30 @@
+version: "3.8"
+
+x-build: &dockerfile-dev-build
+  context: .
+  dockerfile: Dockerfile.dev
+
+services:
+  db:
+    image: postgres:13.2-alpine
+    environment:
+      POSTGRES_USER: django_multiple_schemas_dev
+      POSTGRES_PASSWORD: django_multiple_schemas_password
+  remote-interpreter:
+    build: *dockerfile-dev-build
+    volumes:
+      - .:/app
+    env_file: .env.development
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+    command:
+      [
+        "./scripts/wait-for-it.sh",
+        "db:5432",
+        "-t",
+        "120",
+        "--",
+        "./scripts/start-development.sh",
+      ]
