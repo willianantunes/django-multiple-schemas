@@ -95,6 +95,8 @@ DATABASES = {
     }
 }
 
+if os.getenv("PYTEST_RUNNING"):
+    del DATABASES["default"]["OPTIONS"]
 
 # Password validation
 # https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators
