@@ -6,6 +6,14 @@
 
 Here you'll find an honest project that shows how to use schema with Django. It has a script that creates all the scenario the project needs in PostgreSQL, it even has tests to guarantee that it is created as expected. Check more details below!
 
+## Why this project?
+
+If you are in a scenario where there are many applications using the same database machine, it's advisable to create one single database, let's say `db_production`, and then separate each application by its own schema (we can understand it as a folder). This is quite important because if you are using a CDC (Change Database Capture) solution like [Amazon DMS](https://aws.amazon.com/dms/), it consumes an entire session (know more about it [here](https://aws.amazon.com/blogs/database/analyzing-amazon-rds-database-workload-with-performance-insights/)) per database, which is an quite expensive resource. 
+
+Let's say you have three Apps and each one has its own database. If your company needs data from these three databases, then three sessions will be consumed. Now if you're using schemas, only one. To illustrate:
+
+![An image which shows all the database's objects](./docs/database-vs-schemas.png "All schemas/folders created")
+
 ## Some basic details
 
 You can check it out consulting [initialize-database.sh](./scripts/docker-entrypoint-initdb.d/initialize-database.sh) file.
