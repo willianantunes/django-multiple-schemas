@@ -1,6 +1,8 @@
 # Django Multiple Schemas
 
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
+[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=willianantunes_django-multiple-schemas&metric=coverage)](https://sonarcloud.io/dashboard?id=willianantunes_django-multiple-schemas)
+[![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=willianantunes_django-multiple-schemas&metric=ncloc)](https://sonarcloud.io/dashboard?id=willianantunes_django-multiple-schemas)
 
 Here you'll find an honest project that shows how to use schema with Django. It has a script that creates all the scenario the project needs in PostgreSQL, it even has tests to guarantee that it is created as expected. Check more details below!
 
