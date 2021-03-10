@@ -2,21 +2,19 @@
 
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 
-TODO.
+Here you'll find an honest project that shows how to use schema with Django. It has a script that creates all the scenario the project needs in PostgreSQL, it even has tests to guarantee that it is created as expected. Check more details below!
 
-## Usage
+## Some basic details
 
-TODO.
+You can check it out consulting [initialize-database.sh](./scripts/docker-entrypoint-initdb.d/initialize-database.sh) file.
 
-## Development
+I created a test script where it guarantees the script executed as expected. Check [test_initialize_database.py](./tests/integration/scripts/docker-entrypoint-initdb.d/test_initialize_database.py) to know more. Great place of reference [here](https://github.com/psycopg/psycopg2/tree/master/tests). 
 
-### Database initialization scripts
-
-You can check it out consulting [initialize-database.sh](./scripts/docker-entrypoint-initdb.d/initialize-database.sh) file. The result is like the following:
+The result is like the following (it may be outdated):
 
 ![An image which shows all the database's objects](./docs/all-schemas-and-tables-inside-schema-dev.png "All schemas/folders created")
 
-It's important to mention that if you execute `docker-compose up tests` it won't pass, unless you comment out `OPTIONS` key which is stored in the dictionary DATABASES in [settings.py](./django_multiple_schemas/settings.py). I will solve that soon.
+## Development
 
 ### Updating pipenv dependencies
 
