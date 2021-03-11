@@ -6,9 +6,11 @@
 
 Here you'll find an honest project that shows how to use schema with Django. It has a script that creates all the scenario the project needs in PostgreSQL, it even has tests to guarantee that it is created as expected. Check more details below!
 
-## Running the project
+## Running the project and checking multiple schemas working
 
-Execute `docker-compose up remote-interpreter` and then access `http://0.0.0.0:8000/`. Use `admin` for _username_ and _password_.
+Execute `docker-compose up -d remote-interpreter jafar-app iago-app jasmine-app`. After they are running, you can check the database through its port (you can use a client for that, like [DataGrip](https://www.jetbrains.com/datagrip/)). If you'd like to access `remote-interpreter` service administration panel, access `http://0.0.0.0:8000/` and use `admin` for _username_ and _password_.
+
+All the services can be accessed through their admin interface. Please see [docker-compose.yaml](./docker-compose.yaml) to figure out which port to use.
 
 ## Why this project?
 
@@ -45,6 +47,14 @@ Because when you use `@pytest.mark.django_db` fixture, pytest will create a dedi
 4. Which kind of [ROLE](https://www.postgresql.org/docs/13/database-roles.html) does my application need?
 
 The basic thing is that your application should run with a role that can do full DQL and DML on the target schema, but not DDL. If you'd like to run `python manage.py migrate`, you can use a dedicated role just for that.
+
+5. Can I configure multiple schemas in a single Django Application?
+
+Yes, it's possible. Django can only apply migration to one folder/schema per database/entry configured in `DATABASES` dict variable in `settings.py`. If you check [here](https://github.com/willianantunes/django-multiple-schemas/blob/2deb15de36d1229f19bd4422d3f55b0d7a57a797/django_multiple_schemas/settings.py#L85), you will see that I'm using only one database that is identified as `default`. Now if you need multiple schemas, let's say two, you can have `default` key followed by `my-another-setup`, and then use another schema in it.
+
+6. Can [search path](https://github.com/willianantunes/django-multiple-schemas/blob/2deb15de36d1229f19bd4422d3f55b0d7a57a797/django_multiple_schemas/settings.py#L89) has more than one schema?
+
+Yes. You can have something like `-c search_path=iago_dev,jafar_dev`.
 
 ## Development
 

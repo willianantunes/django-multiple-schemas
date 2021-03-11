@@ -34,6 +34,69 @@ services:
         "--",
         "./scripts/start-development.sh",
       ]
+  jafar-app:
+    build: *dockerfile-dev-build
+    volumes:
+      - .:/app
+    env_file: .env.development
+    environment:
+      DB_SCHEMA: jafar_dev
+      DB_USER: role_jafar_dev
+    ports:
+      - "8001:8000"
+    depends_on:
+      - db
+    command:
+      [
+        "./scripts/wait-for-it.sh",
+        "db:5432",
+        "-t",
+        "120",
+        "--",
+        "./scripts/start-development.sh",
+      ]
+  iago-app:
+    build: *dockerfile-dev-build
+    volumes:
+      - .:/app
+    env_file: .env.development
+    environment:
+      DB_SCHEMA: iago_dev
+      DB_USER: role_iago_dev
+    ports:
+      - "8002:8000"
+    depends_on:
+      - db
+    command:
+      [
+        "./scripts/wait-for-it.sh",
+        "db:5432",
+        "-t",
+        "120",
+        "--",
+        "./scripts/start-development.sh",
+      ]
+  jasmine-app:
+    build: *dockerfile-dev-build
+    volumes:
+      - .:/app
+    env_file: .env.development
+    environment:
+      DB_SCHEMA: jasmine_dev
+      DB_USER: role_jasmine_dev
+    ports:
+      - "8003:8000"
+    depends_on:
+      - db
+    command:
+      [
+        "./scripts/wait-for-it.sh",
+        "db:5432",
+        "-t",
+        "120",
+        "--",
+        "./scripts/start-development.sh",
+      ]
   tests:
     build: *dockerfile-dev-build
     volumes:
