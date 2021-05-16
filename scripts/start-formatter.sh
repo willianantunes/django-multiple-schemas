@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
 
+# https://www.willianantunes.com/blog/2021/05/production-ready-shell-startup-scripts-the-set-builtin/
+set -eu -o pipefail
+
 TARGET_PROJECT=django_multiple_schemas
 TARGET_TEST_PROJECT=tests
 TARGET_FOLDERS="$TARGET_PROJECT $TARGET_TEST_PROJECT"

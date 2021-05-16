@@ -1,9 +1,7 @@
 #!/bin/bash
 
-# https://www.gnu.org/software/bash/manual/bash.html#The-Set-Builtin
-# -e  Exit immediately if a command exits with a non-zero status.
-# -x Print commands and their arguments as they are executed.
-set -x
+# https://www.willianantunes.com/blog/2021/05/production-ready-shell-startup-scripts-the-set-builtin/
+set -eu -o pipefail
 
 # Interesting issues
 # - https://github.com/docker-library/postgres/issues/151
