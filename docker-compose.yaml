@@ -16,6 +16,16 @@ services:
       - ./scripts/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
     ports:
     - "5432:5432"
+  connection-pool:
+    image: edoburu/pgbouncer:1.15.0
+    user: postgres
+    environment:
+      # You can use env variables to generate your pgbouncer.ini
+      # See more details here: https://github.com/edoburu/docker-pgbouncer/blob/v1.15.x/entrypoint.sh
+      # https://www.pgbouncer.org/features.html
+      POOL_MODE: transaction
+    volumes:
+      - ./pgbouncer:/etc/pgbouncer
   remote-interpreter:
     build: *dockerfile-dev-build
     volumes:
@@ -40,7 +50,7 @@ services:
       - .:/app
     env_file: .env.development
     environment:
-      DB_SCHEMA: jafar_dev
+      DB_HOST: "connection-pool"
       DB_USER: role_jafar_dev
     ports:
       - "8001:8000"
@@ -61,7 +71,7 @@ services:
       - .:/app
     env_file: .env.development
     environment:
-      DB_SCHEMA: iago_dev
+      DB_HOST: "connection-pool"
       DB_USER: role_iago_dev
     ports:
       - "8002:8000"
@@ -82,7 +92,7 @@ services:
       - .:/app
     env_file: .env.development
     environment:
-      DB_SCHEMA: jasmine_dev
+      DB_HOST: "connection-pool"
       DB_USER: role_jasmine_dev
     ports:
       - "8003:8000"

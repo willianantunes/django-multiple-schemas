@@ -1,0 +1,5 @@
+; echo -n "$DB_PASSWORD$DB_USER" | md5sum
+; echo -n "please-dont-use-this-password-everrole_jafar_dev" | md5sum
+"role_jafar_dev" "md5c6963126a07c0b13e3445d2f04c026d9"
+"role_iago_dev" "md5e685765dd12c90eb7fa052c5abe695fd"
+"role_jasmine_dev" "md5cbf478e8838968daeae74a7bf51bf118"

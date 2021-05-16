@@ -3,6 +3,7 @@ from contextlib import contextmanager
 import psycopg2
 
 from django_multiple_schemas.support.django_helpers import getenv_or_raise_exception
+from tests.support.database_utils import transform_role_config_param_details_result_dtos
 from tests.support.database_utils import transform_role_dql_result_to_dtos
 
 _system_schemas = [("pg_toast",), ("pg_catalog",), ("public",), ("information_schema",)]
@@ -110,6 +111,46 @@ def test_should_all_roles_be_created():
             assert role in result
 
 
+def test_should_all_roles_have_search_path_set_with_one_schema_only_db_dev():
+    dql_role_details = """
+        SELECT r.rolname, d.datname, rs.setconfig
+        FROM pg_db_role_setting rs
+                 LEFT JOIN pg_roles r ON r.oid = rs.setrole
+                 LEFT JOIN pg_database d ON d.oid = rs.setdatabase
+        WHERE r.rolname = %s AND d.datname = %s;
+    """
+
+    roles_and_their_databases = [
+        ("role_django_multiple_schemas_dev", _database_dev),
+        ("role_jafar_dev", _database_dev),
+        ("role_iago_dev", _database_dev),
+        ("role_jasmine_dev", _database_dev),
+    ]
+
+    roles_and_their_schemas = {
+        "role_django_multiple_schemas_dev": "django_multiple_schemas_dev",
+        "role_jafar_dev": "jafar_dev",
+        "role_iago_dev": "iago_dev",
+        "role_jasmine_dev": "jasmine_dev",
+    }
+
+    for role_setup in roles_and_their_databases:
+        with generate_connection(_database_standard) as connection:
+            cursor = connection.cursor()
+            cursor.execute(dql_role_details, role_setup)
+
+            dtos = transform_role_config_param_details_result_dtos(cursor.fetchall())
+
+            assert len(dtos) == 1
+            role_config_param_details = dtos[0]
+            role_name = role_setup[0]
+            assert role_config_param_details.name == role_name
+            assert role_config_param_details.database == _database_dev
+            assert len(role_config_param_details.search_path) == 1
+            schema = roles_and_their_schemas[role_name]
+            assert role_config_param_details.search_path["search_path"] == [schema]
+
+
 def test_should_have_created_two_database():
     dql_list_all_databases = "SELECT datname FROM pg_database WHERE datistemplate = false;"
 
@@ -121,7 +162,7 @@ def test_should_have_created_two_database():
         result = cursor.fetchall()
 
         count_of_database = len(databases) + len(_system_databases)
-        possible_db_created_by_pytest = (f"test_{_database_dev}",)
+        possible_db_created_by_pytest = (f"test_{_database_standard}",)
         if possible_db_created_by_pytest in result:
             count_of_database += 1
 
