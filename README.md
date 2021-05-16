@@ -30,32 +30,6 @@ The result is like the following (it may be outdated):
 
 ![An image which shows all the database's objects](./docs/all-schemas-and-tables-inside-schema-dev.png "All schemas/folders created")
 
-## FAQ
-
-1. Why you created `PYTEST_RUNNING` in `settings.py`?
-
-Actually it is not needed. The default schema is `public`, so you can configure `DB_SCHEMA` with it, but my idea is to show that you can use `django_multiple_schemas_dev` to run your application, so instead of creating a dedicated environment file for tests, I just use one for tests and to run the application.
-
-2. Do I need `PYTEST_RUNNING` in my real application?
-
-No, you don't. Actually you must configure `DB_SCHEMA` with the value `public`.
-
-3. Why did you apply `CREATEDB` for the application ROLE?
-
-Because when you use `@pytest.mark.django_db` fixture, pytest will create a dedicated database for your test. It will use `test_` followed by your database name.
-
-4. Which kind of [ROLE](https://www.postgresql.org/docs/13/database-roles.html) does my application need?
-
-The basic thing is that your application should run with a role that can do full DQL and DML on the target schema, but not DDL. If you'd like to run `python manage.py migrate`, you can use a dedicated role just for that.
-
-5. Can I configure multiple schemas in a single Django Application?
-
-Yes, it's possible. Django can only apply migration to one folder/schema per database/entry configured in `DATABASES` dict variable in `settings.py`. If you check [here](https://github.com/willianantunes/django-multiple-schemas/blob/2deb15de36d1229f19bd4422d3f55b0d7a57a797/django_multiple_schemas/settings.py#L85), you will see that I'm using only one database that is identified as `default`. Now if you need multiple schemas, let's say two, you can have `default` key followed by `my-another-setup`, and then use another schema in it.
-
-6. Can [search path](https://github.com/willianantunes/django-multiple-schemas/blob/2deb15de36d1229f19bd4422d3f55b0d7a57a797/django_multiple_schemas/settings.py#L89) has more than one schema?
-
-Yes. You can have something like `-c search_path=iago_dev,jafar_dev`.
-
 ## Development
 
 ### Updating pipenv dependencies
